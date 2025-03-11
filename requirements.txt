@@ -1,8 +1,8 @@
 dash
 pandas
 plotly
-plotly
-dotenv
-os
+python-dotenv
 gspread
-google.oauth2.service_account
+google-auth
+google-auth-oauthlib
+google-auth-httplib2
