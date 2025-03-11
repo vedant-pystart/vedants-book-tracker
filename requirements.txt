@@ -1,8 +1,9 @@
-dash
+dash[no-deps]
+flask
 pandas
-plotly
-# python-dotenv
-# gspread
-# google-auth
-# google-auth-oauthlib
-# google-auth-httplib2
+plotly[no-deps]
+python-dotenv
+gspread
+google-auth
+google-auth-oauthlib
+google-auth-httplib2
