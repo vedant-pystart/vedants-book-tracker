@@ -6,7 +6,6 @@ from dotenv import load_dotenv
 import os
 import gspread
 from google.oauth2.service_account import Credentials
-import pandas as pd
 
 load_dotenv()
 
