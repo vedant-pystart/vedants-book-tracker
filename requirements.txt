@@ -1,9 +1,0 @@
-dash[no-deps]
-flask
-pandas
-plotly[no-deps]
-python-dotenv
-gspread
-google-auth
-google-auth-oauthlib
-google-auth-httplib2
