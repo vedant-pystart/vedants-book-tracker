@@ -4,36 +4,38 @@ import plotly.express as px
 import plotly.graph_objects as go
 from dotenv import load_dotenv
 import os
-import gspread
-from google.oauth2.service_account import Credentials
+# import gspread
+# from google.oauth2.service_account import Credentials
 
-load_dotenv()
-
-
-# Path to your downloaded JSON key file
-key_path = os.getenv("GOOGLE_SHEET_KEY_PATH")
-spreadsheet_id = os.getenv("GOOGLE_SHEET_ID")
+# load_dotenv()
 
 
-# Scopes for Google Sheets API access
-scopes = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive.file"]
-
-# Authenticate using the service account credentials
-creds = Credentials.from_service_account_file(key_path, scopes=scopes)
-
-# Authenticate with gspread
-gc = gspread.authorize(creds)
+# # Path to your downloaded JSON key file
+# key_path = os.getenv("GOOGLE_SHEET_KEY_PATH")
+# spreadsheet_id = os.getenv("GOOGLE_SHEET_ID")
 
 
-sheet = gc.open_by_key(spreadsheet_id).sheet1
+# # Scopes for Google Sheets API access
+# scopes = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive.file"]
 
-# Get all values from the sheet
-data = sheet.get_all_values()
+# # Authenticate using the service account credentials
+# creds = Credentials.from_service_account_file(key_path, scopes=scopes)
 
-# Convert to Pandas DataFrame
-columns = data[0]  # First row as column headers
-rows = data[1:]    # Remaining rows as data
-df = pd.DataFrame(rows, columns=columns)
+# # Authenticate with gspread
+# gc = gspread.authorize(creds)
+
+
+# sheet = gc.open_by_key(spreadsheet_id).sheet1
+
+# # Get all values from the sheet
+# data = sheet.get_all_values()
+
+# # Convert to Pandas DataFrame
+# columns = data[0]  # First row as column headers
+# rows = data[1:]    # Remaining rows as data
+# df = pd.DataFrame(rows, columns=columns)
+
+df = pd.read_excel('GIT Local Book Tracker/Book Log.xlsx')
 
 
 """

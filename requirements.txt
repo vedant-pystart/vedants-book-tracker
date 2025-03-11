@@ -1,6 +1,6 @@
-# dash
-# pandas
-# plotly
+dash
+pandas
+plotly
 # python-dotenv
 # gspread
 # google-auth
