@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 import os
 import gspread
 from google.oauth2.service_account import Credentials
+import json
 
 load_dotenv()
 
@@ -18,8 +19,11 @@ spreadsheet_id = os.getenv("GOOGLE_SHEET_ID")
 # Scopes for Google Sheets API access
 scopes = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive.file"]
 
-# Authenticate using the service account credentials
-creds = Credentials.from_service_account_file(key_path, scopes=scopes)
+import json
+
+# Load credentials from environment variable
+service_account_info = json.loads(os.getenv("GOOGLE_SHEET_CREDENTIALS"))
+creds = Credentials.from_service_account_info(service_account_info, scopes=scopes)
 
 # Authenticate with gspread
 gc = gspread.authorize(creds)
