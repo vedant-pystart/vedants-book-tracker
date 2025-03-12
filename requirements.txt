@@ -1,0 +1,7 @@
+dash==2.18.2
+gspread==6.2.0
+pandas==2.2.3
+protobuf==6.30.0
+python-dotenv==1.0.1
+gunicorn
+dash-tools
