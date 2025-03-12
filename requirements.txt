@@ -7,3 +7,5 @@ gunicorn
 dash-tools
 docopt-ng
 wheel
+setuptools
+docopt
