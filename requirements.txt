@@ -6,6 +6,7 @@ python-dotenv==1.0.1
 gunicorn
 dash-tools
 docopt-ng
+plotly.express
 wheel
 setuptools
 docopt
