@@ -138,6 +138,7 @@ bookspermonth.update_traces(
 """
 
 app = Dash(suppress_callback_exceptions=True)
+server = app.server
 
 
 app.layout = html.Div([
@@ -419,4 +420,5 @@ def update_vis(rec_values, year_values, month_values):
 
 if __name__ == "__main__":
     app.run_server(debug=True)
+    
 
