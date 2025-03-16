@@ -10,3 +10,4 @@ plotly.express
 wheel
 setuptools
 docopt
+dash_bootstrap_components
