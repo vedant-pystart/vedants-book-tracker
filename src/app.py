@@ -8,7 +8,13 @@ import gspread
 from google.oauth2.service_account import Credentials
 import json
 
+import dash_bootstrap_components as dbc
+
+
 load_dotenv()
+
+width1 = '80%'
+width2 = '60%'
 
 
 # Path to your downloaded JSON key file
@@ -40,7 +46,6 @@ rows = data[1:]    # Remaining rows as data
 df = pd.DataFrame(rows, columns=columns)
 
 # df = pd.read_excel('GIT Local Book Tracker/Book Log.xlsx')
-
 
 """
 ==================================================
@@ -141,7 +146,9 @@ bookspermonth.update_traces(
 ==================================================
 """
 
-app = Dash(suppress_callback_exceptions=True)
+app = Dash(__name__, external_stylesheets=[dbc.themes.LUX, "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap"], suppress_callback_exceptions=True)
+
+# app = Dash(suppress_callback_exceptions=True)
 server = app.server
 
 
@@ -194,8 +201,10 @@ def display_page(pathname):
 
     else:
         return html.Div([
-    html.H1("Local Book Tracking Analytics Dashboard", style={"textAlign": "center", "fontFamily": "Arial, sans-serif"}),  
+    html.H1("Vedant's Book Tracking Dashboard", style={"textAlign": "center", "fontFamily": "Arial, sans-serif"}),  
     html.Hr(),  
+
+
 
 # Book Status Label and Dropdown
     html.Div([
@@ -205,9 +214,9 @@ def display_page(pathname):
             ["Complete"], 
             multi=True, 
             id="DropdownBookStatus", 
-            style={"width": "75%", "fontFamily": "Arial, sans-serif"}
+            style={"width": width1, "fontFamily": "Arial, sans-serif"}
         )
-    ], style={"width": "75%", "margin": "auto", "display": "flex", "alignItems": "center", "gap": "10px"}),
+    ], style={"width": width2, "margin": "auto", "display": "flex", "alignItems": "center", "gap": "10px"}),
 
     # Recommendation Label and Dropdown
     html.Div([
@@ -220,9 +229,9 @@ def display_page(pathname):
             ],
             value=["Yes"],  # Default to 'Yes'
             multi=True,  # Allow multiple selection
-            style={"width": "75%", "fontFamily": "Arial, sans-serif"}
+            style={"width": width1, "fontFamily": "Arial, sans-serif"}
         ),
-    ], style={"width": "75%", "margin": "auto", "display": "flex", "alignItems": "center", "gap": "10px"}),
+    ], style={"width": width2, "margin": "auto", "display": "flex", "alignItems": "center", "gap": "10px"}),
 
     # Year Label
     html.Div([
@@ -231,9 +240,9 @@ def display_page(pathname):
             id="year_dropdown",
             options= year_options,
             multi=True,
-            style={"width": "75%", "fontFamily": "Arial, sans-serif"}
+            style={"width": width1, "fontFamily": "Arial, sans-serif"}
         ),
-    ], style={"width": "75%", "margin": "auto", "display": "flex", "alignItems": "center", "gap": "10px"}),
+    ], style={"width": width2, "margin": "auto", "display": "flex", "alignItems": "center", "gap": "10px"}),
 
     # Month Label
 
@@ -243,20 +252,10 @@ def display_page(pathname):
             id="month_dropdown",
             options= month_options,
             multi=True,
-            style={"width": "75%", "fontFamily": "Arial, sans-serif"}
+            style={"width": width1, "fontFamily": "Arial, sans-serif"}
         ),
-    ], style={"width": "75%", "margin": "auto", "display": "flex", "alignItems": "center", "gap": "10px"}),
+    ], style={"width": width2, "margin": "auto", "display": "flex", "alignItems": "center", "gap": "10px"}),
 
-
-    # # Genre Dropdown
-    # html.Div([
-    #     html.Label("Genre:", style={"fontFamily": "Arial, sans-serif", "fontWeight": "bold", "fontSize": "16px", "width": "150px"}),
-    #     dcc.Dropdown(options = genre_options, 
-    #         multi=True, 
-    #         id="DropdownBookStatus", 
-    #         style={"width": "75%", "fontFamily": "Arial, sans-serif"}
-    #     )
-    # ], style={"width": "75%", "margin": "auto", "display": "flex", "alignItems": "center", "gap": "10px"}),
     html.Hr(),
 
     # Table
@@ -286,8 +285,6 @@ def display_page(pathname):
     dcc.Graph(id="ratings_histogram"),
     html.Hr(),
     dcc.Graph(figure = bookspermonth)
-
-
   
 ])
 
@@ -327,12 +324,6 @@ def update_table(status_values, rec_values, selected_years, selected_months,):
                 (filtered_df["End Month"].isin(selected_months))
             ]
 
-    # # Filter by Genre (Handle NaN Values)
-    # if selected_genres:
-    #     filtered_df = filtered_df.dropna(subset=["Genre"])  # Drop NaNs before applying filter
-    #     filtered_df = filtered_df[
-    #         filtered_df["Genre"].apply(lambda x: any(genre in x.split(", ") for genre in selected_genres))
-    #     ]
 
     # Format the Book Link as Markdown
     filtered_df["Book Link"] = filtered_df["Book Link"].apply(lambda x: f"[More Info]({x})")
@@ -425,4 +416,3 @@ def update_vis(rec_values, year_values, month_values):
 if __name__ == "__main__":
     app.run_server(debug=True)
     
-
