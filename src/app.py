@@ -9,6 +9,7 @@ from google.oauth2.service_account import Credentials
 import json
 
 import dash_bootstrap_components as dbc
+from flask import Flask
 
 
 load_dotenv()
@@ -150,6 +151,13 @@ app = Dash(__name__, external_stylesheets=[dbc.themes.LUX, "https://fonts.google
 
 # app = Dash(suppress_callback_exceptions=True)
 server = app.server
+
+
+# Handle ping requests for cron job
+
+@server.route('/ping')  # Add lightweight ping route
+def ping():
+    return "pong", 200  # Small response
 
 
 app.layout = html.Div([
