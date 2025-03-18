@@ -22,7 +22,6 @@ width2 = '60%'
 key_path = os.getenv("GOOGLE_SHEET_KEY_PATH")
 spreadsheet_id = os.getenv("GOOGLE_SHEET_ID")
 
-
 # Scopes for Google Sheets API access
 scopes = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive.file"]
 
@@ -34,7 +33,6 @@ creds = Credentials.from_service_account_info(service_account_info, scopes=scope
 
 # Authenticate with gspread
 gc = gspread.authorize(creds)
-
 
 sheet = gc.open_by_key(spreadsheet_id).sheet1
 
@@ -286,11 +284,11 @@ def display_page(pathname):
             {"if": {"column_id": "Status", "filter_query": '{Status} = "Complete"'}, "color": "green", "fontWeight": "bold", "fontStyle": "italic"},
             {"if": {"column_id": "Status", "filter_query": '{Status} = "To Be Read"'}, "color": "#8B0000", "fontWeight": "bold", "fontStyle": "italic"},
             {"if": {"column_id": "Status", "filter_query": '{Status} = "Reading"'}, "color": "orange", "fontWeight": "bold", "fontStyle": "italic"}
-        ]
+        ],         filter_action='native', sort_action= 'native',
     ),   
     html.Hr(),
 
-    dcc.Graph(id="ratings_histogram"),
+    # dcc.Graph(id="ratings_histogram"),
     html.Hr(),
     dcc.Graph(figure = bookspermonth)
   
@@ -339,87 +337,87 @@ def update_table(status_values, rec_values, selected_years, selected_months,):
     return filtered_df.to_dict("records")
 
 # Update visualization based on recommendation filter
-@callback(
-    Output("ratings_histogram", "figure"),
-    Input("rec-dropdown", "value"),
-    Input("year_dropdown", "value"),  # Year filter
-    Input("month_dropdown", "value")  # Month filter
-)
-def update_vis(rec_values, year_values, month_values):
-    if "All" in rec_values or not rec_values:  
-        dfvis1 = df
-    else:
-        # Filter based on selected values for 'Rec?'
-        dfvis1 = df[df["Rec?"].isin(rec_values)]
+# @callback(
+#     Output("ratings_histogram", "figure"),
+#     Input("rec-dropdown", "value"),
+#     Input("year_dropdown", "value"),  # Year filter
+#     Input("month_dropdown", "value")  # Month filter
+# )
+# def update_vis(rec_values, year_values, month_values):
+#     if "All" in rec_values or not rec_values:  
+#         dfvis1 = df
+#     else:
+#         # Filter based on selected values for 'Rec?'
+#         dfvis1 = df[df["Rec?"].isin(rec_values)]
 
-    if not year_values or "All" in year_values:  # Check for None or empty
-        dfvis1 = dfvis1  # No filtering on Year
-    else:
-        # Filter based on both Start Year and End Year
-        dfvis1 = dfvis1[dfvis1["Start Year"].isin(year_values) | dfvis1["End Year"].isin(year_values)]
+#     if not year_values or "All" in year_values:  # Check for None or empty
+#         dfvis1 = dfvis1  # No filtering on Year
+#     else:
+#         # Filter based on both Start Year and End Year
+#         dfvis1 = dfvis1[dfvis1["Start Year"].isin(year_values) | dfvis1["End Year"].isin(year_values)]
 
-    if not month_values or "All" in month_values:  # Check for None or empty
-        dfvis1 = dfvis1  # No filtering on Year
-    else:
-        # Filter based on both Start Year and End Year
-        dfvis1 = dfvis1[dfvis1["Start Month"].isin(month_values) | dfvis1["End Month"].isin(month_values)]
+#     if not month_values or "All" in month_values:  # Check for None or empty
+#         dfvis1 = dfvis1  # No filtering on Year
+#     else:
+#         # Filter based on both Start Year and End Year
+#         dfvis1 = dfvis1[dfvis1["Start Month"].isin(month_values) | dfvis1["End Month"].isin(month_values)]
 
 
-    # Categorize the ratings into buckets (you can adjust ranges as needed)
-    rating_bins = pd.cut(dfvis1['Rating'], bins=[0, 5, 7, 10], labels=["Low", "Medium", "High"])
+#     # Categorize the ratings into buckets (you can adjust ranges as needed)
+#     rating_bins = pd.cut(dfvis1['Rating'], bins=[0, 5, 7, 10], labels=["Low", "Medium", "High"])
 
-    # Add a new column for the rating categories
-    dfvis1['Rating Category'] = rating_bins
+#     # Add a new column for the rating categories
+#     dfvis1['Rating Category'] = rating_bins
 
-    # Create histogram
-    vis = px.histogram(
-        dfvis1, 
-        x="Rating",  # Show rating distribution
-        nbins=20,  # Adjust number of bins as necessary
-        color="Rating Category",  # Color based on the rating category
-        color_discrete_map={"Low": "#8B0000", "Medium": "orange", "High": "green"},  # Set color map
-        title="Ratings Distribution"
-    )
-    # Update layout for custom title styling, axis removal, and no legend
-    vis.update_layout(
-        title={
-            'text': 'Ratings Distribution',  # Title text
-            'font': {
-                'family': 'Arial, sans-serif',  # Font type
-                'size': 24,  # Font size
-                'color': 'black',  # Font color
-                'weight': 'bold'  # Font weight
-            },
-            'x': 0.5,  # Center the title horizontally
-            'xanchor': 'center'  # Align the title to the center
-        },
-        yaxis=dict(
-            showticklabels=False,  # Hides the labels (numbers) on the y-axis
-            showgrid=False,  # Removes the grid lines
-            zeroline=False,  # Hides the zero line
-            title=""  # Remove y-axis title
-        ),
-        xaxis=dict(
-            showgrid=True,  # Keeps the grid on the x-axis
-            zeroline = True, 
-            linecolor = "black"
-        ),
-        legend=dict(
-            visible=False  # Hides the legend
-        ), 
-        plot_bgcolor='white',  # Sets the background color of the plot area (the actual graph area)
-        paper_bgcolor='white',  # Sets the background color of the entire figure (including title, margins)
-        hoverlabel=dict(
-        bgcolor="rgba(255,255,255,0.7)",  # Slightly transparent background for hover
-        font_size=14,  # Font size for hover label
-        font_family="Arial, sans-serif",  # Font for hover label
-        font_color="black"  # Hover label text color
-    ),
-    bargap=0.01,  # Reduce the gap between bars for a more packed look
-    margin=dict(t=40, b=30, l=40, r=40),  # Reduce margins for compactness
-    hovermode="closest"  # More responsive hover
-    )
-    return vis
+#     # Create histogram
+#     vis = px.histogram(
+#         dfvis1, 
+#         x="Rating",  # Show rating distribution
+#         nbins=20,  # Adjust number of bins as necessary
+#         color="Rating Category",  # Color based on the rating category
+#         color_discrete_map={"Low": "#8B0000", "Medium": "orange", "High": "green"},  # Set color map
+#         title="Ratings Distribution"
+#     )
+#     # Update layout for custom title styling, axis removal, and no legend
+#     vis.update_layout(
+#         title={
+#             'text': 'Ratings Distribution',  # Title text
+#             'font': {
+#                 'family': 'Arial, sans-serif',  # Font type
+#                 'size': 24,  # Font size
+#                 'color': 'black',  # Font color
+#                 'weight': 'bold'  # Font weight
+#             },
+#             'x': 0.5,  # Center the title horizontally
+#             'xanchor': 'center'  # Align the title to the center
+#         },
+#         yaxis=dict(
+#             showticklabels=False,  # Hides the labels (numbers) on the y-axis
+#             showgrid=False,  # Removes the grid lines
+#             zeroline=False,  # Hides the zero line
+#             title=""  # Remove y-axis title
+#         ),
+#         xaxis=dict(
+#             showgrid=True,  # Keeps the grid on the x-axis
+#             zeroline = True, 
+#             linecolor = "black"
+#         ),
+#         legend=dict(
+#             visible=False  # Hides the legend
+#         ), 
+#         plot_bgcolor='white',  # Sets the background color of the plot area (the actual graph area)
+#         paper_bgcolor='white',  # Sets the background color of the entire figure (including title, margins)
+#         hoverlabel=dict(
+#         bgcolor="rgba(255,255,255,0.7)",  # Slightly transparent background for hover
+#         font_size=14,  # Font size for hover label
+#         font_family="Arial, sans-serif",  # Font for hover label
+#         font_color="black"  # Hover label text color
+#     ),
+#     bargap=0.01,  # Reduce the gap between bars for a more packed look
+#     margin=dict(t=40, b=30, l=40, r=40),  # Reduce margins for compactness
+#     hovermode="closest"  # More responsive hover
+#     )
+#     return vis
 
 if __name__ == "__main__":
     app.run_server(debug=True)
