@@ -11,6 +11,8 @@ import json
 import dash_bootstrap_components as dbc
 from flask import Flask
 
+# NOTE THERE IS A BUG WHERE THE MORE INFO DOESNT WORK FOR PARENTHESIS IN BOOK NAME (EG RAM CHANDRA)
+
 
 load_dotenv()
 
