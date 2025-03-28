@@ -12,3 +12,8 @@ Site should be fully functional. Removed ratings histogram functionality (to be 
 Mar 27 2025
 Second Release. Refactored entire codebase to use Dash Bootstrap Components. 
 
+## V.2.0.1
+Mar 28 2025
+Fixed bug where series titles (eg. Scion of Ikshvaku (Ram Chandra #1)) were not properly outputting in more info column. 
+
+
