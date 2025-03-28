@@ -26,7 +26,16 @@ def load_book_details(stored_data, pathname):
     dff = pd.DataFrame(stored_data)
     book_name = pathname.split("/")[-1].replace("_", " ")  
 
-    book_info = dff[dff["Book"] == book_name]
+    import re
+
+    def normalize_book_name(name):
+        return re.sub(r'[:#()\s]+', '_', name).strip('_')
+
+    book_name = normalize_book_name(book_name)  # Normalize user input
+    dff["Normalized Book"] = dff["Book"].apply(normalize_book_name)  # Normalize dataset
+
+    book_info = dff[dff["Normalized Book"] == book_name]  
+
     if book_info.empty:
         return "Book Not Found", "", ""
 

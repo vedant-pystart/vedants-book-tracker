@@ -70,7 +70,8 @@ import datetime
 df = df.iloc[:, 0:25] # Takes in the first 25 columns 
 df = df.dropna(how="all") # Drops rows where values are NaN
 df["Rating"] = pd.to_numeric(df["Rating"], errors="coerce") 
-df["Book Link"] = df["Book"].apply(lambda book: f"/book/{book.replace(' ', '_')}") # Creates a link to the book
+
+df["Book Link"] = df["Book"].str.replace(r"[:#()]", "", regex=True).str.replace(" ", "_").apply(lambda book: f"/book/{book}")
 df["Start Date"] = pd.to_datetime(df["Start Date"], errors="coerce") 
 df["End Date"] = pd.to_datetime(df["End Date"], errors="coerce")
 df["Start Year"] = df["Start Date"].dt.year
