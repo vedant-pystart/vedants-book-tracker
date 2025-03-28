@@ -12,4 +12,3 @@ setuptools
 docopt
 dash_bootstrap_components
 pandas_datareader
-re
