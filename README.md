@@ -8,3 +8,7 @@ Mar 18 2025
 "First" Major Release.
 Site should be fully functional. Removed ratings histogram functionality (to be fixed in later patch)
 
+## V.2.0.0
+Mar 27 2025
+Second Release. Refactored entire codebase to use Dash Bootstrap Components. 
+
