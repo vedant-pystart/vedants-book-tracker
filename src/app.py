@@ -58,6 +58,8 @@ import datetime
 
 # df = pd.read_excel('Past_Projects/GIT Local Book Tracker/Book Log.xlsx')
 
+
+
 """
 ==================================================
 1. DATA PREPROCESSING
@@ -117,6 +119,8 @@ app.layout = html.Div([
     dash.page_container,  # This automatically loads the correct page layout
     dcc.Store(id='store', data=df.to_dict("records"), storage_type='memory'),  # Store component to hold data
 ])
+
+server = app.server
 
 
 if __name__ == '__main__':
