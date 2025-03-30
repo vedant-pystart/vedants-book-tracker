@@ -17,7 +17,6 @@ filteringoptions = dbc.Container([
         ],
         multi=True,
         placeholder="Select Status",
-        value=["To Be Read", "Reading", "Complete"],
         className="m-3"
     )
 ])
